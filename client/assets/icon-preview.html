@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Tray Icon Preview</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f5f5f5;
+    }
+    .icon-container {
+      display: flex;
+      gap: 40px;
+      align-items: flex-end;
+      margin-bottom: 30px;
+    }
+    .icon-box {
+      text-align: center;
+    }
+    .icon-box img {
+      display: block;
+      margin-bottom: 10px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .icon-box span {
+      font-size: 12px;
+      color: #666;
+    }
+    .instructions {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Tray Icon Preview</h2>
+  <p>Right-click the icon and "Save image as icon.png"</p>
+
+  <div class="icon-container">
+    <div class="icon-box">
+      <img src="icon.svg" width="64" height="64" style="padding: 20px;">
+      <span>64x64 (icon.png)</span>
+    </div>
+    <div class="icon-box">
+      <img src="icon.svg" width="32" height="32" style="padding: 20px;">
+      <span>32x32 (icon.png)</span>
+    </div>
+    <div class="icon-box">
+      <img src="icon.svg" width="16" height="16" style="padding: 20px;">
+      <span>16x16 (icon.png)</span>
+    </div>
+  </div>
+
+  <div class="instructions">
+    <h3>托盘图标说明：</h3>
+    <p>Windows系统托盘建议使用 16x16 或 32x32 的PNG图标</p>
+    <p>保存为 <code>client/assets/icon.png</code></p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "floating-danmu-client",
+  "version": "1.0.0",
+  "description": "B站弹幕悬浮发送工具 - 桌面客户端",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "keywords": ["bilibili", "danmu", "electron"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0",
+    "axios": "^1.6.0"
+  }
+}
