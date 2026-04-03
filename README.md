@@ -192,10 +192,8 @@ POST http://localhost:34567/api/message
 
 MIT License
 
-## 🤝 贡献
-
-欢迎提交 Issue 和 PR！
 
 ---
 
 Made with ❤️ for Bilibili users
+Write with MiniMax-M2.7 ❤️ Kimi-K2.5 in TraeCN SOLO.
