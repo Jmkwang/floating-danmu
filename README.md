@@ -195,5 +195,6 @@ MIT License
 
 ---
 
-Made with ❤️ for Bilibili users
+Made with ❤️ for Bilibili users.
+
 Write with MiniMax-M2.7 ❤️ Kimi-K2.5 in TraeCN SOLO.
