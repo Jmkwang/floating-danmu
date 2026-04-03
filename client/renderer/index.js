@@ -6,9 +6,8 @@
   const closeBtn = document.getElementById('closeBtn');
   const minimizeBtn = document.getElementById('minimizeBtn');
   const statusText = document.getElementById('statusText');
-  const statusIndicator = document.getElementById('statusIndicator');
-  const resultText = document.getElementById('resultText');
   const capsuleStatus = document.getElementById('capsuleStatus');
+  const statusIndicator = document.getElementById('statusIndicator');
 
   let currentPageInfo = null;
   let currentCookies = null;
@@ -16,84 +15,41 @@
 
   function updateStatus(text, type) {
     statusText.textContent = text;
-    statusIndicator.className = 'status-indicator';
+    capsuleStatus.textContent = text;
 
-    if (type === 'connected') {
+    if (type) {
       statusIndicator.classList.add('connected');
-    } else if (type === 'live') {
-      statusIndicator.classList.add('live');
-    }
-
-    updateCapsuleStatus(type);
-  }
-
-  function updateCapsuleStatus(type) {
-    capsuleStatus.className = 'capsule-status';
-
-    if (type === 'live') {
-      capsuleStatus.classList.add('live');
-      capsuleStatus.textContent = '●';
-    } else if (type === 'connected') {
-      capsuleStatus.classList.add('connected');
-      capsuleStatus.textContent = '●';
     } else {
-      capsuleStatus.textContent = '●';
+      statusIndicator.classList.remove('connected');
     }
-  }
 
-  function showResult(text, type) {
-    resultText.textContent = text;
-    resultText.className = type;
-
-    setTimeout(() => {
-      resultText.textContent = '';
-      resultText.className = '';
-    }, 3000);
-  }
-
-  function setMode(mode) {
-    isCapsuleMode = mode === 'capsule';
-
-    if (isCapsuleMode) {
-      mainContainer.style.display = 'none';
-      capsuleContainer.style.display = 'flex';
-    } else {
-      mainContainer.style.display = 'block';
-      capsuleContainer.style.display = 'none';
-    }
+    mainContainer.className = 'container';
   }
 
   async function sendDanmaku() {
     const content = danmuInput.value.trim();
-    if (!content) {
-      showResult('请输入弹幕内容', 'error');
-      return;
-    }
+    if (!content) return;
 
     if (!currentCookies || !currentCookies.SESSDATA) {
-      showResult('未检测到登录状态', 'error');
       return;
     }
 
     if (!currentPageInfo) {
-      showResult('未检测到B站页面', 'error');
       return;
     }
 
     sendBtn.disabled = true;
-    showResult('发送中...', '');
 
     try {
       const result = await window.electronAPI.sendDanmaku(content);
-
-      if (result.success) {
-        showResult('✓ 已发送', 'success');
+      if (result && result.success) {
         danmuInput.value = '';
-      } else {
-        showResult('✗ ' + (result.error || '发送失败'), 'error');
+        danmuInput.classList.add('success-flash');
+        setTimeout(() => {
+          danmuInput.classList.remove('success-flash');
+        }, 1000);
       }
     } catch (err) {
-      showResult('✗ ' + err.message, 'error');
     } finally {
       sendBtn.disabled = false;
     }
@@ -115,7 +71,6 @@
     window.electronAPI.minimizeWindow();
   });
 
-  // 胶囊点击展开 - 使用 mousedown 来区分拖拽和点击
   let isDragging = false;
   let dragStartTime = 0;
 
@@ -130,7 +85,6 @@
 
   capsuleContainer.addEventListener('mouseup', () => {
     const dragDuration = Date.now() - dragStartTime;
-    // 如果拖拽时间很短且没有明显移动，认为是点击
     if (!isDragging && dragDuration < 200) {
       window.electronAPI.expandWindow();
     }
@@ -156,9 +110,17 @@
 
   if (window.electronAPI && window.electronAPI.onWindowModeChanged) {
     window.electronAPI.onWindowModeChanged((mode) => {
-      setMode(mode);
+      isCapsuleMode = mode === 'capsule';
+
+      if (isCapsuleMode) {
+        mainContainer.style.display = 'none';
+        capsuleContainer.style.display = 'flex';
+      } else {
+        mainContainer.style.display = 'block';
+        capsuleContainer.style.display = 'none';
+      }
     });
   }
 
-  updateStatus('等待B站页面...', '');
+  updateStatus('等待连接...', '');
 })();

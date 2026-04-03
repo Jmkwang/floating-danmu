@@ -11,11 +11,8 @@
   <div class="container" id="mainContainer">
     <div class="header">
       <div class="title-row">
-        <div class="title-section">
-          <span class="title-icon">💬</span>
-          <span class="status-indicator" id="statusIndicator">●</span>
-          <span class="status-text" id="statusText">等待连接...</span>
-        </div>
+        <span class="status-indicator" id="statusIndicator"></span>
+        <span class="status-text" id="statusText">等待连接...</span>
         <div class="window-controls">
           <button class="minimize-btn" id="minimizeBtn" title="收起">−</button>
           <button class="close-btn" id="closeBtn" title="隐藏到托盘">×</button>
@@ -26,16 +23,12 @@
       <input type="text" id="danmuInput" placeholder="输入弹幕..." maxlength="20">
       <button id="sendBtn">发送</button>
     </div>
-    <div class="footer">
-      <span id="resultText"></span>
-    </div>
   </div>
 
   <!-- 胶囊收起状态 -->
   <div class="capsule" id="capsuleContainer" style="display: none;">
     <div class="capsule-drag-area">
-      <span class="capsule-icon">💬</span>
-      <span class="capsule-status" id="capsuleStatus">●</span>
+      <span class="status-text-capsule" id="capsuleStatus">等待...</span>
     </div>
   </div>
 

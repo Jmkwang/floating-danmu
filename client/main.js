@@ -15,7 +15,7 @@ const CLIENT_PORT = 34567;
 
 const WINDOW_CONFIG = {
   expanded: { width: 280, height: 110 },
-  capsule: { width: 60, height: 60 }
+  capsule: { width: 120, height: 32 }
 };
 
 function createWindow() {

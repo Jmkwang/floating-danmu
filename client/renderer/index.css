@@ -18,12 +18,11 @@ body {
 /* 展开状态容器 */
 .container {
   width: 280px;
-  background: rgba(40, 40, 40, 0.85);
+  background: rgba(30, 30, 30, 0.92);
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   overflow: hidden;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
 }
 
 /* 头部 */
@@ -37,40 +36,28 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.title-section {
-  display: flex;
-  align-items: center;
   gap: 6px;
-  -webkit-app-region: no-drag;
-}
-
-.title-icon {
-  font-size: 14px;
 }
 
 .status-indicator {
-  font-size: 10px;
-  color: #faad14;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #faad14;
+  flex-shrink: 0;
 }
 
 .status-indicator.connected {
-  color: #52c41a;
-}
-
-.status-indicator.live {
-  color: #52c41a;
-  animation: pulse 1.5s infinite;
+  background: #52c41a;
 }
 
 .status-text {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.95);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 140px;
+  max-width: 200px;
 }
 
 .window-controls {
@@ -101,11 +88,6 @@ body {
   background: rgba(255, 255, 255, 0.4);
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
 /* 输入区域 */
 .input-area {
   padding: 8px;
@@ -123,6 +105,7 @@ body {
   background: rgba(255, 255, 255, 0.1);
   color: white;
   min-width: 0;
+  transition: border-color 0.15s ease;
 }
 
 #danmuInput::placeholder {
@@ -132,6 +115,11 @@ body {
 #danmuInput:focus {
   border-color: rgba(251, 114, 153, 0.6);
   background: rgba(255, 255, 255, 0.15);
+}
+
+#danmuInput.success-flash {
+  border-color: #52c41a;
+  box-shadow: 0 0 8px rgba(82, 196, 26, 0.5);
 }
 
 #sendBtn {
@@ -161,78 +149,44 @@ body {
   transform: none;
 }
 
-/* 底部状态 */
-.footer {
-  padding: 0 8px 4px;
-  min-height: 14px;
-}
-
-#resultText {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-#resultText.success {
-  color: #52c41a;
-}
-
-#resultText.error {
-  color: #ff7875;
-}
-
-/* 胶囊收起状态 - 整个胶囊可拖拽 */
+/* 胶囊收起状态 - 横向胶囊 */
 .capsule {
-  width: 44px;
-  height: 44px;
-  background: rgba(40, 40, 40, 0.6);
-  border-radius: 22px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 120px;
+  height: 32px;
+  background: rgba(30, 30, 30, 0.85);
+  border-radius: 8px;
+  backdrop-filter: blur(16px);
   cursor: grab;
   -webkit-app-region: drag;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .capsule:hover {
-  background: rgba(40, 40, 40, 0.8);
-  transform: scale(1.1);
+  background: rgba(40, 40, 40, 0.9);
+  transform: scale(1.05);
 }
 
 .capsule:active {
   cursor: grabbing;
 }
 
-/* 胶囊内部内容 - 不可拖拽，用于点击展开 */
 .capsule-drag-area {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
   -webkit-app-region: no-drag;
   pointer-events: none;
 }
 
-.capsule-icon {
-  font-size: 16px;
-  pointer-events: auto;
-}
-
-.capsule-status {
-  font-size: 8px;
-  color: #faad14;
-  pointer-events: auto;
-}
-
-.capsule-status.connected {
-  color: #52c41a;
-}
-
-.capsule-status.live {
-  color: #52c41a;
-  animation: pulse 1.5s infinite;
+.status-text-capsule {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
 }
