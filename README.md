@@ -101,11 +101,11 @@ floating-danmu/
 ### 通信流程
 
 ```
-┌─────────────┐      HTTP      ┌─────────────┐
-│ 浏览器插件   │ ◄────────────► │ 桌面客户端   │
+┌─────────────┐      HTTP        ┌─────────────┐
+│ 浏览器插件   │  ◄────────────►  │ 桌面客户端   │
 │             │  localhost:34567 │             │
 │ - 检测B站页面│                  │ - 悬浮窗口   │
-│ - 读取Cookie│                  │ - 发送弹幕   │
+│ - 读取Cookie │                 │ - 发送弹幕   │
 └─────────────┘                  └─────────────┘
 ```
 
@@ -128,13 +128,13 @@ floating-danmu/
 
 #### 桌面客户端（client/）
 
-| 文件                    | 实现方式        | 功能说明                                                                             |
+| 文件                    | 实现方式         | 功能说明                                                                             |
 | ----------------------- | --------------- | ------------------------------------------------------------------------------------ |
-| `main.js`             | Electron 主进程 | 创建 BrowserWindow（透明、置顶、无边框）、HTTP 服务器（Node.js http 模块）、系统托盘 |
-| `preload.js`          | contextBridge   | 安全桥接主进程与渲染进程，暴露 `sendDanmaku`、`onPageInfoUpdated` 等 API         |
-| `renderer/index.html` | HTML 结构       | 展开状态（标题栏 + 输入区）和胶囊状态（横向药丸）的容器结构                          |
-| `renderer/index.css`  | CSS 样式        | 毛玻璃效果（backdrop-filter）、动态边框、横向胶囊布局                                |
-| `renderer/index.js`   | 前端逻辑        | 用户交互处理、窗口模式切换、发送结果反馈                                             |
+| `main.js`               | Electron 主进程  | 创建 BrowserWindow（透明、置顶、无边框）、HTTP 服务器（Node.js http 模块）、系统托盘      |
+| `preload.js`            | contextBridge   | 安全桥接主进程与渲染进程，暴露 `sendDanmaku`、`onPageInfoUpdated` 等 API                 |
+| `renderer/index.html`   | HTML 结构        | 展开状态（标题栏 + 输入区）和胶囊状态（横向药丸）的容器结构                               |
+| `renderer/index.css`    | CSS 样式         | 毛玻璃效果（backdrop-filter）、动态边框、横向胶囊布局                                   |
+| `renderer/index.js`     | 前端逻辑         | 用户交互处理、窗口模式切换、发送结果反馈                                                 |
 
 #### 通信协议
 
@@ -159,10 +159,10 @@ POST http://localhost:34567/api/message
 
 #### B站API调用
 
-| 场景         | API 端点                                    | 请求方式 | 关键参数                               |
+| 场景         | API 端点                                    | 请求方式  | 关键参数                               |
 | ------------ | ------------------------------------------- | -------- | -------------------------------------- |
-| 发送直播弹幕 | `https://api.live.bilibili.com/msg/send`  | POST     | roomid, msg, csrf_token, bubble, color |
-| 发送视频评论 | `https://api.bilibili.com/x/v2/reply/add` | POST     | oid, type=1, message, csrf_token       |
+| 发送直播弹幕  | `https://api.live.bilibili.com/msg/send`    | POST     | roomid, msg, csrf_token, bubble, color |
+| 发送视频评论  | `https://api.bilibili.com/x/v2/reply/add`   | POST     | oid, type=1, message, csrf_token       |
 
 ## 🔧 开发说明
 
