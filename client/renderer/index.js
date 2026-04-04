@@ -30,11 +30,13 @@
     const content = danmuInput.value.trim();
     if (!content) return;
 
-    if (!currentCookies || !currentCookies.SESSDATA) {
+    if (!currentPageInfo || currentPageInfo.type !== 'live') {
+      updateStatus('请在直播间使用', '');
       return;
     }
 
-    if (!currentPageInfo) {
+    if (!currentCookies || !currentCookies.SESSDATA) {
+      updateStatus('未登录，无法发送弹幕', '');
       return;
     }
 
@@ -48,8 +50,11 @@
         setTimeout(() => {
           danmuInput.classList.remove('success-flash');
         }, 1000);
+      } else {
+        updateStatus(result.error || '发送失败', '');
       }
     } catch (err) {
+      updateStatus('发送异常', '');
     } finally {
       sendBtn.disabled = false;
     }
@@ -96,13 +101,14 @@
         currentPageInfo = info;
         currentCookies = info.cookies;
 
-        const typeText = info.type === 'live' ? '直播间' : '视频';
         const hasLogin = info.cookies && info.cookies.SESSDATA;
 
-        if (hasLogin) {
-          updateStatus(`${typeText}: ${info.title || '未知'}`, info.type);
+        if (info.type === 'live' && hasLogin) {
+          updateStatus(`直播间: ${info.title || '未知'}`, 'live');
+        } else if (info.type === 'live' && !hasLogin) {
+          updateStatus(`直播间: ${info.title || '未知'} (未登录)`, '');
         } else {
-          updateStatus(`${typeText}: ${info.title || '未知'} (未登录)`, '');
+          updateStatus('仅支持B站直播间', '');
         }
       }
     });

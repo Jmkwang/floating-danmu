@@ -1,6 +1,6 @@
 # Floating Danmu 💬
 
-一款专为 B 站用户设计的弹幕发送辅助工具。当你在观看直播或视频时，无需切换回浏览器窗口，直接通过桌面悬浮窗即可快速发送弹幕。
+一款专为 B 站用户设计的弹幕发送辅助工具。当你在观看直播时，无需切换回浏览器窗口，直接通过桌面悬浮窗即可快速发送弹幕。
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)
@@ -20,7 +20,7 @@
 - ✅ 浏览器最小化也能发弹幕
 - ✅ 桌面悬浮窗口，随时待命
 - ✅ 支持收起为胶囊，不占空间
-- ✅ 自动识别直播间/视频页
+- ✅ 自动识别直播间
 
 ## ✨ 功能特性
 
@@ -30,7 +30,7 @@
 | 🔴**状态指示**   | 🟡 黄点=未连接 / 🟢 绿点=已连接，一目了然 |
 | 💊**胶囊模式**   | 支持收起为透明胶囊，更隐蔽不占空间        |
 | 🖱️**自由拖拽** | 窗口位置自由调整，放在顺手的位置          |
-| 📺**直播+视频**  | 同时支持 B 站直播间和视频页发弹幕         |
+| 📺**直播间**    | 支持 B 站直播间发弹幕                     |
 | 🔒**安全登录**   | 自动读取浏览器 Cookie，无需额外登录       |
 
 ## 📸 界面预览
@@ -38,7 +38,7 @@
 ```
 展开状态:                    胶囊模式:
 ┌──────────────────────┐    ┌──────────────┐
-│ 直播间: xxx  − ×     │    │ 等待B站页面  │
+│ 直播间: xxx  − ×     │    │ 等待直播间  │
 ├──────────────────────┤    └──────────────┘
 │ [输入弹幕... ] [发送] │
 └──────────────────────┘
@@ -64,7 +64,7 @@ npm start
 ### 3. 开始使用
 
 1. 启动桌面客户端（会显示在系统托盘）
-2. 在浏览器打开 B 站直播间或视频页
+2. 在浏览器打开 B 站直播间
 3. 悬浮窗口自动显示页面状态（绿点表示已连接）
 4. 输入弹幕内容，按 Enter 或点击发送
 
@@ -123,7 +123,7 @@ floating-danmu/
 | 文件              | 实现方式                   | 功能说明                                                           |
 | ----------------- | -------------------------- | ------------------------------------------------------------------ |
 | `manifest.json` | Manifest V3 配置           | 定义插件权限、content script 匹配规则、background service worker   |
-| `content.js`    | DOM 解析                   | 检测 B 站直播间/视频页，提取 roomId、bvid、标题等信息              |
+| `content.js`    | DOM 解析                   | 检测 B 站直播间，提取 roomId、标题等信息                           |
 | `background.js` | Service Worker + Fetch API | 监听页面变化，读取登录 Cookie，通过 HTTP POST 发送数据到桌面客户端 |
 
 #### 桌面客户端（client/）
@@ -145,9 +145,8 @@ POST http://localhost:34567/api/message
 {
   "type": "page-update",
   "pageInfo": {
-    "type": "live" | "video",
+    "type": "live",
     "roomId": "直播间ID",
-    "bvid": "视频BV号",
     "title": "页面标题"
   },
   "cookies": {
@@ -162,7 +161,6 @@ POST http://localhost:34567/api/message
 | 场景         | API 端点                                    | 请求方式  | 关键参数                               |
 | ------------ | ------------------------------------------- | -------- | -------------------------------------- |
 | 发送直播弹幕  | `https://api.live.bilibili.com/msg/send`    | POST     | roomid, msg, csrf_token, bubble, color |
-| 发送视频评论  | `https://api.bilibili.com/x/v2/reply/add`   | POST     | oid, type=1, message, csrf_token       |
 
 ## 🔧 开发说明
 

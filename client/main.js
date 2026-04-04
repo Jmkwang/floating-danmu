@@ -201,16 +201,15 @@ ipcMain.handle('send-danmaku', async (event, data) => {
   const { content } = data;
 
   try {
-    let result;
-
-    if (currentPageInfo && currentPageInfo.type === 'live') {
-      result = await sendLiveDanmaku(content, currentCookies, currentPageInfo.roomId);
-    } else if (currentPageInfo && currentPageInfo.type === 'video') {
-      result = await sendVideoDanmaku(content, currentCookies, currentPageInfo.bvid);
-    } else {
-      result = { success: false, error: '未检测到B站页面' };
+    if (!currentPageInfo || currentPageInfo.type !== 'live') {
+      return { success: false, error: '请在B站直播间使用' };
     }
 
+    if (!currentCookies || !currentCookies.SESSDATA) {
+      return { success: false, error: '未登录，请先登录B站' };
+    }
+
+    const result = await sendLiveDanmaku(content, currentCookies, currentPageInfo.roomId);
     return result;
   } catch (error) {
     return { success: false, error: error.message };
@@ -277,68 +276,6 @@ async function sendLiveDanmaku(content, cookies, roomId) {
     }
   } catch (error) {
     console.error('Live danmaku error:', error.response?.data || error.message);
-    return { success: false, error: error.response?.data?.message || error.message };
-  }
-}
-
-async function sendVideoDanmaku(content, cookies, bvid) {
-  const axios = require('axios');
-
-  if (!cookies || !cookies.SESSDATA) {
-    return { success: false, error: '未登录，请先登录B站' };
-  }
-
-  const csrf = cookies.bili_jct || '';
-  const cookieStr = buildCookieString(cookies);
-
-  try {
-    const oidResponse = await axios.get(
-      `https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`,
-      {
-        headers: {
-          'Cookie': cookieStr,
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        }
-      }
-    );
-
-    if (!oidResponse.data || oidResponse.data.code !== 0) {
-      return { success: false, error: '无法获取视频信息' };
-    }
-
-    const oid = oidResponse.data.data.aid;
-
-    const params = new URLSearchParams({
-      oid: oid.toString(),
-      type: '1',
-      message: content,
-      csrf: csrf,
-      csrf_token: csrf
-    });
-
-    const response = await axios.post(
-      `https://api.bilibili.com/x/v2/reply/add`,
-      params.toString(),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Cookie': cookieStr,
-          'Referer': `https://www.bilibili.com/video/${bvid}`,
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          'Origin': 'https://www.bilibili.com'
-        }
-      }
-    );
-
-    console.log('Video danmaku response:', response.data);
-
-    if (response.data && response.data.code === 0) {
-      return { success: true };
-    } else {
-      return { success: false, error: response.data?.message || response.data?.msg || '发送失败' };
-    }
-  } catch (error) {
-    console.error('Video danmaku error:', error.response?.data || error.message);
     return { success: false, error: error.response?.data?.message || error.message };
   }
 }
